@@ -87,3 +87,7 @@ each([
   callSomeAsynchronousFunction(asynchronousSpy)(str);
 });
 ```
+
+## License
+
+MIT
