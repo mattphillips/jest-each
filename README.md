@@ -1,5 +1,7 @@
 # jest-each
 
+[![Build Status](https://travis-ci.org/mattphillips/jest-each.svg?branch=master)](https://travis-ci.org/mattphillips/jest-each)
+
 A parameterised testing library for [Jest](https://facebook.github.io/jest/) inspired by [mocha-each](https://github.com/ryym/mocha-each).
 
 jest-each allows you to provide multiple arguments to your `test` which results in the test being run once per row of parameters.
