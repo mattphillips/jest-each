@@ -1,6 +1,7 @@
 # jest-each
 
 [![Build Status](https://travis-ci.org/mattphillips/jest-each.svg?branch=master)](https://travis-ci.org/mattphillips/jest-each)
+[![Coverage Status](https://coveralls.io/repos/github/mattphillips/jest-each/badge.svg?branch=master)](https://coveralls.io/github/mattphillips/jest-each?branch=master)
 
 A parameterised testing library for [Jest](https://facebook.github.io/jest/) inspired by [mocha-each](https://github.com/ryym/mocha-each).
 
