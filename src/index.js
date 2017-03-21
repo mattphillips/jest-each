@@ -3,6 +3,7 @@ import { vsprintf } from 'sprintf-js';
 export default (paramRows, globalTest = global.test) => {
   const test = tests(paramRows, globalTest);
   test.skip = tests(paramRows, globalTest.skip);
+  test.only = tests(paramRows, globalTest.only);
 
   return { test };
 };
