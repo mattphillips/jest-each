@@ -19,6 +19,15 @@ describe('jest-each', () => {
       expect(globalTestMock.mock.calls[1][0]).toBe('expected string');
     });
 
+    test('calls global test with title containing param values when using sprintf format', () => {
+      const globalTestMock = jest.fn();
+      each([['hello', 1], ['world', 2]], globalTestMock).test('expected string: %s %s', () => {});
+
+      expect(globalTestMock.mock.calls.length).toBe(2);
+      expect(globalTestMock.mock.calls[0][0]).toBe('expected string: hello 1');
+      expect(globalTestMock.mock.calls[1][0]).toBe('expected string: world 2');
+    });
+
     test('calls global test with cb function', () => {
       const globalTestMock = jest.fn();
       const testCallBack = jest.fn();

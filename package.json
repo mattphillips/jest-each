@@ -34,5 +34,8 @@
       "stage-0",
       "es2015"
     ]
+  },
+  "dependencies": {
+    "sprintf-js": "^1.0.3"
   }
 }
