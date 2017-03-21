@@ -1,15 +1,15 @@
 import { vsprintf } from 'sprintf-js';
 
-export default (paramRows, globalTest = global.test) => {
-  const test = tests(paramRows, globalTest);
-  test.skip = tests(paramRows, globalTest.skip);
-  test.only = tests(paramRows, globalTest.only);
+export default (parameterRows, globalTest = global.test) => {
+  const test = parameterisedTests(parameterRows, globalTest);
+  test.skip = parameterisedTests(parameterRows, globalTest.skip);
+  test.only = parameterisedTests(parameterRows, globalTest.only);
 
   return { test };
 };
 
-const tests = (rows, globalCb) => (title, test) => {
-  rows.forEach(params => globalCb(vsprintf(title, params), applyTestParams(params, test)));
+const parameterisedTests = (parameterRows, globalCb) => (title, test) => {
+  parameterRows.forEach(params => globalCb(vsprintf(title, params), applyTestParams(params, test)));
 };
 
 const applyTestParams = (params, test) => {
