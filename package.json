@@ -1,0 +1,38 @@
+{
+  "name": "jest-each",
+  "version": "0.0.1",
+  "description": "Parameterised tests for Jest",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattphillips/jest-each.git"
+  },
+  "keywords": [
+    "jest",
+    "parameterised",
+    "test",
+    "each"
+  ],
+  "author": "Matt Phillips (mattphillips)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattphillips/jest-each/issues"
+  },
+  "homepage": "https://github.com/mattphillips/jest-each#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-jest": "^19.0.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "jest": "^19.0.2"
+  },
+  "babel": {
+    "presets": [
+      "stage-0",
+      "es2015"
+    ]
+  }
+}
