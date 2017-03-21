@@ -3,8 +3,13 @@
   "version": "0.0.1",
   "description": "Parameterised tests for Jest",
   "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "babel src -d dist --ignore *.spec.js",
+    "prepublish": "npm run build",
     "test": "jest",
     "test:coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
     "test:coverage": "jest --coverage"
