@@ -20,6 +20,18 @@ jest-each allows you to provide multiple arguments to your `test` which results 
 
 `yarn add -D jest-each`
 
+## Importing
+
+jest-each is a default export so it can be imported with whatever name you like.
+
+```js
+// es6
+import each from 'jest-each';
+
+// es5
+const each = require('jest-each');
+```
+
 ## API
 
 `each([parameters]).test(title, testCallback)`
