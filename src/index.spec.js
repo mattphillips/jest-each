@@ -69,5 +69,15 @@ describe('jest-each', () => {
       expect(testCallBack.mock.calls[1][0]).toBe('joe');
       expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
     });
+
+    test('calls global test with async done when cb function has more args than params of given test row', () => {
+      const globalTestMock = jest.fn();
+      each([['hello']], globalTestMock).test('expected string', (hello, done) => {
+        expect(hello).toBe('hello');
+        expect(done).toBe('DONE');
+      });
+
+      globalTestMock.mock.calls[0][1]('DONE');
+    });
   });
 });
