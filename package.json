@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Parameterised tests for Jest",
   "scripts": {
+    "build": "babel src -d dist --ignore *.spec.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/mattphillips/jest-each#readme",
   "devDependencies": {
+    "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
     "babel-jest": "^19.0.0",
     "babel-preset-es2015": "^6.24.0",
