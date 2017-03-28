@@ -1,6 +1,8 @@
 import { vsprintf } from 'sprintf-js';
 
-export default (parameterRows, globalTest = global.test) => {
+export default (parameterRows, defaultGlobal = global) => {
+  const globalTest = defaultGlobal.test;
+  
   const test = parameterisedTests(parameterRows, globalTest);
   test.skip = parameterisedTests(parameterRows, globalTest.skip);
   test.only = parameterisedTests(parameterRows, globalTest.only);
