@@ -3,7 +3,6 @@ import each from '../../src';
 describe('test', () => {
   describe('.add', () => {
     const add = (a, b) => a + b;
-
     each([
       [1, 2, 3],
       [2, 1, 3],
@@ -14,7 +13,6 @@ describe('test', () => {
   });
 
   describe('true', () => {
-
     each([
       [true],
       [true],

@@ -13,6 +13,7 @@ jest-each allows you to provide multiple arguments to your `test` which results 
  - `.test.skip` to skip the parameterised tests
     * Also under the alias: `.it.skip`
  - `.test.only` to only run the parameterised tests
+    * Also under the alias: `.it.only`
  - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
 
@@ -36,7 +37,7 @@ const each = require('jest-each');
 
 ## API
 
-`each([parameters]).test(name, fn)`
+### `each([parameters]).test(name, fn)`
 
 #### `each`:
   - parameters: `Array` the arguments that are passed into the `fn`
@@ -64,6 +65,8 @@ each([
 ```
 
 #### `.test.only(name, fn)`
+Alias: `.it.only(name, fn)`
+
 ```js
 each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
   expect(add(a, b)).toBe(expected);
