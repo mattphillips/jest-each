@@ -8,11 +8,11 @@ A parameterised testing library for [Jest](https://facebook.github.io/jest/) ins
 jest-each allows you to provide multiple arguments to your `test` which results in the test being run once per row of parameters.
 
 ## Features
- - Parameterised test data
+ - `.test` to runs multiple tests with parameterised data
+ - `.test.skip` to skip the parameterised tests
+ - `.test.only` to only run the parameterised tests
+ - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
- - Supports `test.skip` to skip the parameterised tests
- - Supports `test.only` to only run the parameterised tests
- - Supports asynchronous tests with `done`
 
 ## Installation
 
@@ -34,18 +34,19 @@ const each = require('jest-each');
 
 ## API
 
-`each([parameters]).test(title, testCallback)`
+`each([parameters]).test(name, fn)`
 
 #### `each`:
-  - parameters: `Array` the arguments that are passed into the `testCallback`
+  - parameters: `Array` the arguments that are passed into the `fn`
 
 #### `.test`:
-  - title: `String` the title of the `test`, use `%s` in the title string to positionally inject parameter values into the test title
-  - testCallback: `Function` the test logic, this is the function that will receive the parameters as function arguments
+  - name: `String` the title of the `test`, use `%s` in the name string to positionally inject parameter values into the test title
+  - fn: `Function` the test logic, this is the function that will receive the parameters as function arguments
 
 ## Usage
 
-#### `.test`
+#### `.test(name, fn)`
+
 ```js
 import each from 'jest-each';
 import add from './add';
@@ -59,21 +60,21 @@ each([
 });
 ```
 
-#### `.test.only`
+#### `.test.only(name, fn)`
 ```js
 each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
   expect(add(a, b)).toBe(expected);
 });
 ```
 
-#### `.test.skip`
+#### `.test.skip(name, fn)`
 ```js
 each([ [1, 1, 2] ]).test.skip('returns the result of adding %s to %s', (a, b, expected) => {
   expect(add(a, b)).toBe(expected);
 });
 ```
 
-#### asynchronous `.test`
+#### Asynchronous `.test(name, fn(done))`
 ```js
 each([
   ['hello'],
