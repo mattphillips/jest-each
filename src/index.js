@@ -2,12 +2,14 @@ import { vsprintf } from 'sprintf-js';
 
 export default (parameterRows, defaultGlobal = global) => {
   const globalTest = defaultGlobal.test;
+  const globalIt = defaultGlobal.it;
   
   const test = parameterisedTests(parameterRows, globalTest);
   test.skip = parameterisedTests(parameterRows, globalTest.skip);
   test.only = parameterisedTests(parameterRows, globalTest.only);
 
-  return { test };
+  const it = parameterisedTests(parameterRows, globalIt);
+  return { test, it };
 };
 
 const parameterisedTests = (parameterRows, globalCb) => (title, test) => {
