@@ -315,4 +315,69 @@ describe('jest-each', () => {
       expect(typeof globalItSkipMock.it.skip.mock.calls[0][1] === 'function').toBe(true);
     });
   });
+
+  describe('.it.only', () => {
+    test('calls global it only with given title', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      each([[]], globalItOnlyMock).it.only('expected string', () => {});
+
+      expect(globalItOnlyMock.it.only.mock.calls.length).toBe(1);
+      expect(globalItOnlyMock.it.only.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global it only with given title when multiple tests cases exist', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      each([[], []], globalItOnlyMock).it.only('expected string', () => {});
+
+      expect(globalItOnlyMock.it.only.mock.calls.length).toBe(2);
+      expect(globalItOnlyMock.it.only.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global it only with title containing param values when using sprintf format', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      each([['hello', 1], ['world', 2]], globalItOnlyMock).it.only('expected string: %s %s', () => {});
+
+      expect(globalItOnlyMock.it.only.mock.calls.length).toBe(2);
+      expect(globalItOnlyMock.it.only.mock.calls[0][0]).toBe('expected string: hello 1');
+      expect(globalItOnlyMock.it.only.mock.calls[1][0]).toBe('expected string: world 2');
+    });
+
+    test('calls global it only with cb function', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      const testCallBack = jest.fn();
+      each([[]], globalItOnlyMock).it.only('expected string', testCallBack);
+
+      expect(globalItOnlyMock.it.only.mock.calls.length).toBe(1);
+      expect(typeof globalItOnlyMock.it.only.mock.calls[0][1] === 'function').toBe(true);
+    });
+
+    test('calls global it only with cb function containing all parameters of first row when multiple test cases exist', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      const testCallBack = jest.fn();
+      each([
+        ['hello', 'world'],
+        ['joe', 'bloggs'],
+      ], globalItOnlyMock).it.only('expected string', testCallBack);
+
+      globalItOnlyMock.it.only.mock.calls[0][1]();
+      expect(testCallBack.mock.calls.length).toBe(1);
+      expect(testCallBack.mock.calls[0][0]).toBe('hello');
+      expect(testCallBack.mock.calls[0][1]).toBe('world');
+
+      globalItOnlyMock.it.only.mock.calls[1][1]();
+      expect(testCallBack.mock.calls.length).toBe(2);
+      expect(testCallBack.mock.calls[1][0]).toBe('joe');
+      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
+    });
+
+    test('calls global it only with async done when cb function has more args than params of given test row', () => {
+      const globalItOnlyMock = { it: { only: jest.fn() }, test: {} };
+      each([['hello']], globalItOnlyMock).it.only('expected string', (hello, done) => {
+        expect(hello).toBe('hello');
+        expect(done).toBe('DONE');
+      });
+
+      globalItOnlyMock.it.only.mock.calls[0][1]('DONE');
+    });
+  });
 });

@@ -10,6 +10,7 @@ export default (parameterRows, defaultGlobal = global) => {
 
   const it = parameterisedTests(parameterRows, globalIt);
   it.skip = parameterisedTests(parameterRows, globalIt.skip);
+  it.only = parameterisedTests(parameterRows, globalIt.only);
 
   return { test, it };
 };
