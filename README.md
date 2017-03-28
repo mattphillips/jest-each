@@ -83,6 +83,8 @@ each([ [1, 1, 2] ]).test.skip('returns the result of adding %s to %s', (a, b, ex
 ```
 
 #### Asynchronous `.test(name, fn(done))`
+Alias: `.it(name, fn(done))`
+
 ```js
 each([
   ['hello'],
