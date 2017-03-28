@@ -12,4 +12,14 @@ describe('it', () => {
       expect(add(a, b)).toBe(expected);
     });
   });
+
+  describe('whatevz', () => {
+    each([
+      [':('],
+      ['run'],
+      ['me']
+    ]).it.skip('will never run this test %s', (str) => {
+      expect(str).toBe('');
+    });
+  });
 });
