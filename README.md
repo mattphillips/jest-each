@@ -9,6 +9,7 @@ jest-each allows you to provide multiple arguments to your `test` which results 
 
 ## Features
  - `.test` to runs multiple tests with parameterised data
+   * Also under the alias: `.it`
  - `.test.skip` to skip the parameterised tests
  - `.test.only` to only run the parameterised tests
  - Asynchronous tests with `done`
@@ -46,6 +47,7 @@ const each = require('jest-each');
 ## Usage
 
 #### `.test(name, fn)`
+Alias: `.it(name, fn)`
 
 ```js
 import each from 'jest-each';
