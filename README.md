@@ -10,10 +10,10 @@ jest-each allows you to provide multiple arguments to your `test` which results 
 ## Features
  - `.test` to runs multiple tests with parameterised data
    * Also under the alias: `.it`
- - `.test.skip` to skip the parameterised tests
-    * Also under the alias: `.it.skip`
  - `.test.only` to only run the parameterised tests
-    * Also under the alias: `.it.only`
+   * Also under the alias: `.it.only`
+ - `.test.skip` to skip the parameterised tests
+   * Also under the aliases: `.it.skip` or `.xtest`
  - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
 
@@ -74,7 +74,7 @@ each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, ex
 ```
 
 #### `.test.skip(name, fn)`
-Alias: `.it.skip(name, fn)`
+Aliases: `.it.skip(name, fn)` or `.xtest(name, fn)`
 
 ```js
 each([ [1, 1, 2] ]).test.skip('returns the result of adding %s to %s', (a, b, expected) => {
