@@ -22,6 +22,16 @@ describe('it', () => {
     });
   });
 
+  describe('only wit .fit', () => {
+    each([
+      [true],
+      [true],
+      [true]
+    ]).fit('will pass %s', (bool) => {
+      expect(bool).toBe(true);
+    });
+  });
+
   describe('whatevz', () => {
     each([
       [':('],

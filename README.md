@@ -11,7 +11,7 @@ jest-each allows you to provide multiple arguments to your `test` which results 
  - `.test` to runs multiple tests with parameterised data
    * Also under the alias: `.it`
  - `.test.only` to only run the parameterised tests
-   * Also under the alias: `.it.only`
+   * Also under the aliases: `.it.only` or `.fit`
  - `.test.skip` to skip the parameterised tests
    * Also under the aliases: `.it.skip` or `.xit` or `.xtest`
  - Asynchronous tests with `done`
@@ -65,7 +65,7 @@ each([
 ```
 
 #### `.test.only(name, fn)`
-Alias: `.it.only(name, fn)`
+Aliases: `.it.only(name, fn)` or `.fit(name, fn)`
 
 ```js
 each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
