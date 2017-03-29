@@ -13,8 +13,9 @@ export default (parameterRows, defaultGlobal = global) => {
 
   const xtest = parameterisedTests(parameterRows, defaultGlobal.xtest);
   const xit = parameterisedTests(parameterRows, defaultGlobal.xit);
+  const fit = parameterisedTests(parameterRows, defaultGlobal.fit);
 
-  return { test, xtest, it, xit };
+  return { test, xtest, it, xit, fit };
 };
 
 const parameterisedTests = (parameterRows, globalCb) => (title, test) => {
