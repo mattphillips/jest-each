@@ -380,4 +380,41 @@ describe('jest-each', () => {
       globalItOnlyMock.it.only.mock.calls[0][1]('DONE');
     });
   });
+
+  describe('.xtest', () => {
+    test('calls global xtest with given title', () => {
+      const globalXTestMock = { test: {}, it: {}, xtest: jest.fn() };
+      each([[]], globalXTestMock).xtest('expected string', () => {});
+
+      expect(globalXTestMock.xtest.mock.calls.length).toBe(1);
+      expect(globalXTestMock.xtest.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global xtest with given title when multiple tests cases exist', () => {
+      const globalXTestMock = { test: {}, it: {}, xtest: jest.fn() };
+      each([[], []], globalXTestMock).xtest('expected string', () => {});
+
+      expect(globalXTestMock.xtest.mock.calls.length).toBe(2);
+      expect(globalXTestMock.xtest.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global xtest with title containing param values when using sprintf format', () => {
+      const globalXTestMock = { test: {}, it: {}, xtest: jest.fn() };
+      each([['hello', 1], ['world', 2]], globalXTestMock).xtest('expected string: %s %s', () => {});
+
+      expect(globalXTestMock.xtest.mock.calls.length).toBe(2);
+      expect(globalXTestMock.xtest.mock.calls[0][0]).toBe('expected string: hello 1');
+      expect(globalXTestMock.xtest.mock.calls[1][0]).toBe('expected string: world 2');
+    });
+
+    test('calls global xtest with cb function', () => {
+      const globalXTestMock = { test: {}, it: {}, xtest: jest.fn() };
+      const testCallBack = jest.fn();
+      each([[]], globalXTestMock).xtest('expected string', testCallBack);
+
+      expect(globalXTestMock.xtest.mock.calls.length).toBe(1);
+      expect(typeof globalXTestMock.xtest.mock.calls[0][1] === 'function').toBe(true);
+    });
+  });
+
 });
