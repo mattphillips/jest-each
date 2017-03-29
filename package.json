@@ -1,6 +1,6 @@
 {
   "name": "jest-each",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parameterised tests for Jest",
   "main": "dist/index.js",
   "files": [
