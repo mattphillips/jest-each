@@ -417,4 +417,39 @@ describe('jest-each', () => {
     });
   });
 
+  describe('.xit', () => {
+    test('calls global xit with given title', () => {
+      const globalXItMock = { test: {}, it: {}, xit: jest.fn() };
+      each([[]], globalXItMock).xit('expected string', () => {});
+
+      expect(globalXItMock.xit.mock.calls.length).toBe(1);
+      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global xit with given title when multiple tests cases exist', () => {
+      const globalXItMock = { test: {}, it: {}, xit: jest.fn() };
+      each([[], []], globalXItMock).xit('expected string', () => {});
+
+      expect(globalXItMock.xit.mock.calls.length).toBe(2);
+      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string');
+    });
+
+    test('calls global xit with title containing param values when using sprintf format', () => {
+      const globalXItMock = { test: {}, it: {}, xit: jest.fn() };
+      each([['hello', 1], ['world', 2]], globalXItMock).xit('expected string: %s %s', () => {});
+
+      expect(globalXItMock.xit.mock.calls.length).toBe(2);
+      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string: hello 1');
+      expect(globalXItMock.xit.mock.calls[1][0]).toBe('expected string: world 2');
+    });
+
+    test('calls global xit with cb function', () => {
+      const globalXItMock = { test: {}, it: {}, xit: jest.fn() };
+      const testCallBack = jest.fn();
+      each([[]], globalXItMock).xit('expected string', testCallBack);
+
+      expect(globalXItMock.xit.mock.calls.length).toBe(1);
+      expect(typeof globalXItMock.xit.mock.calls[0][1] === 'function').toBe(true);
+    });
+  });
 });

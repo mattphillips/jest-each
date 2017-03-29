@@ -12,8 +12,9 @@ export default (parameterRows, defaultGlobal = global) => {
   it.only = parameterisedTests(parameterRows, globalIt.only);
 
   const xtest = parameterisedTests(parameterRows, defaultGlobal.xtest);
+  const xit = parameterisedTests(parameterRows, defaultGlobal.xit);
 
-  return { test, it, xtest };
+  return { test, xtest, it, xit };
 };
 
 const parameterisedTests = (parameterRows, globalCb) => (title, test) => {
