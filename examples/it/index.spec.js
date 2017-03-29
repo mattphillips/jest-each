@@ -31,4 +31,14 @@ describe('it', () => {
       expect(str).toBe('');
     });
   });
+
+  describe('whatevz ❌👞', () => {
+    each([
+      [':('],
+      ['run'],
+      ['me']
+    ]).xit('will never run this test %s', (str) => {
+      expect(str).toBe('');
+    });
+  });
 });
