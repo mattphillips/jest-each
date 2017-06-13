@@ -1,5 +1,6 @@
 # jest-each
 
+[![npm version](https://badge.fury.io/js/jest-each.svg)](https://badge.fury.io/js/jest-each)
 [![Build Status](https://travis-ci.org/mattphillips/jest-each.svg?branch=master)](https://travis-ci.org/mattphillips/jest-each)
 [![Coverage Status](https://coveralls.io/repos/github/mattphillips/jest-each/badge.svg?branch=master)](https://coveralls.io/github/mattphillips/jest-each?branch=master)
 
