@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel src -d dist --ignore *.spec.js",
     "prepublish": "npm run build",
-    "test": "jest",
+    "test": "jest --testPathPattern=src",
     "test:coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
     "test:coverage": "jest --coverage"
   },

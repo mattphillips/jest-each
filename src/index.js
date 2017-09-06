@@ -1,24 +1,32 @@
 import { vsprintf } from 'sprintf-js';
 
 export default (parameterRows, defaultGlobal = global) => {
+
+  const tests = parameterisedTests(parameterRows);
+
   const globalTest = defaultGlobal.test;
-  const test = parameterisedTests(parameterRows, globalTest);
-  test.skip = parameterisedTests(parameterRows, globalTest.skip);
-  test.only = parameterisedTests(parameterRows, globalTest.only);
+  const test = tests(globalTest);
+  test.skip = tests(globalTest.skip);
+  test.only = tests(globalTest.only);
 
   const globalIt = defaultGlobal.it;
-  const it = parameterisedTests(parameterRows, globalIt);
-  it.skip = parameterisedTests(parameterRows, globalIt.skip);
-  it.only = parameterisedTests(parameterRows, globalIt.only);
+  const it = tests(globalIt);
+  it.skip = tests(globalIt.skip);
+  it.only = tests(globalIt.only);
 
-  const xtest = parameterisedTests(parameterRows, defaultGlobal.xtest);
-  const xit = parameterisedTests(parameterRows, defaultGlobal.xit);
-  const fit = parameterisedTests(parameterRows, defaultGlobal.fit);
+  const xtest = tests(defaultGlobal.xtest);
+  const xit = tests(defaultGlobal.xit);
+  const fit = tests(defaultGlobal.fit);
 
-  return { test, xtest, it, xit, fit };
+  const globalDescribe = defaultGlobal.describe;
+  const describe = tests(globalDescribe);
+  describe.skip = tests(globalDescribe.skip);
+  describe.only = tests(globalDescribe.only);
+
+  return { test, xtest, it, xit, fit, describe };
 };
 
-const parameterisedTests = (parameterRows, globalCb) => (title, test) => {
+const parameterisedTests = parameterRows => globalCb => (title, test) => {
   parameterRows.forEach(params => globalCb(vsprintf(title, params), applyTestParams(params, test)));
 };
 
