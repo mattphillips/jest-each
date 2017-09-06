@@ -23,6 +23,23 @@ jest-each allows you to provide multiple arguments to your `test`/`describe` whi
  - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
 
+
+## Demo
+
+#### Tests without jest-each
+
+![Current jest tests](assets/default-demo.gif)
+
+#### Tests can be re-written with jest-each to:
+
+**`.test`**
+
+![Current jest tests](assets/test-demo.gif)
+
+**`.describe`**
+
+![Current jest tests](assets/describe-demo.gif)
+
 ## Installation
 
 `npm i --save-dev jest-each`
