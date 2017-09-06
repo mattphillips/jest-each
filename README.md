@@ -6,7 +6,7 @@
 
 A parameterised testing library for [Jest](https://facebook.github.io/jest/) inspired by [mocha-each](https://github.com/ryym/mocha-each).
 
-jest-each allows you to provide multiple arguments to your `test` which results in the test being run once per row of parameters.
+jest-each allows you to provide multiple arguments to your `test`/`describe` which results in the test/suite being run once per row of parameters.
 
 ## Features
  - `.test` to runs multiple tests with parameterised data
@@ -15,6 +15,11 @@ jest-each allows you to provide multiple arguments to your `test` which results 
    * Also under the aliases: `.it.only` or `.fit`
  - `.test.skip` to skip the parameterised tests
    * Also under the aliases: `.it.skip` or `.xit` or `.xtest`
+ - `.describe` to runs test suites with parameterised data
+ - `.describe.only` to only run the parameterised suite of tests
+   * Also under the aliases: `.fdescribe`
+ - `.describe.skip` to skip the parameterised suite of tests
+   * Also under the aliases: `.xdescribe`
  - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
 
@@ -38,14 +43,23 @@ const each = require('jest-each');
 
 ## API
 
-### `each([parameters]).test(name, fn)`
+### `each([parameters]).test(name, testFn)`
 
 #### `each`:
-  - parameters: `Array` the arguments that are passed into the `fn`
+  - parameters: `Array` of Arrays with the arguments that are passed into the `testFn` for each row
 
 #### `.test`:
   - name: `String` the title of the `test`, use `%s` in the name string to positionally inject parameter values into the test title
-  - fn: `Function` the test logic, this is the function that will receive the parameters as function arguments
+  - testFn: `Function` the test logic, this is the function that will receive the parameters of each row as function arguments
+
+### `each([parameters]).describe(name, suiteFn)`
+
+#### `each`:
+  - parameters: `Array` of Arrays with the arguments that are passed into the `suiteFn` for each row
+
+#### `.describe`:
+  - name: `String` the title of the `describe`, use `%s` in the name string to positionally inject parameter values into the suite title
+  - suiteFn: `Function` the suite of `test`/`it`s to be ran, this is the function that will receive the parameters in each row as function arguments
 
 ## Usage
 
@@ -69,7 +83,11 @@ each([
 Aliases: `.it.only(name, fn)` or `.fit(name, fn)`
 
 ```js
-each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
+each([
+  [1, 1, 2],
+  [1, 2, 3],
+  [2, 1, 3],
+]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
   expect(add(a, b)).toBe(expected);
 });
 ```
@@ -78,7 +96,11 @@ each([ [1, 1, 2] ]).test.only('returns the result of adding %s to %s', (a, b, ex
 Aliases: `.it.skip(name, fn)` or `.xit(name, fn)` or `.xtest(name, fn)`
 
 ```js
-each([ [1, 1, 2] ]).test.skip('returns the result of adding %s to %s', (a, b, expected) => {
+each([
+  [1, 1, 2]
+  [1, 2, 3],
+  [2, 1, 3],
+]).test.skip('returns the result of adding %s to %s', (a, b, expected) => {
   expect(add(a, b)).toBe(expected);
 });
 ```
@@ -97,6 +119,63 @@ each([
     done();
   };
   callSomeAsynchronousFunction(asynchronousSpy)(str);
+});
+```
+
+#### `.describe(name, fn)`
+
+```js
+import each from 'jest-each';
+import add from './add';
+
+each([
+  [1, 1, 2],
+  [1, 2, 3],
+  [2, 1, 3],
+]).describe('.add(%s, %s)', (a, b, expected) => {
+  test(`returns ${expected}`, () => {
+    expect(add(a, b)).toBe(expected);
+  });
+
+  test('does not mutate first arg', () => {
+    add(a, b);
+    expect(a).toBe(a);
+  });
+
+  test('does not mutate second arg', () => {
+    add(a, b);
+    expect(b).toBe(b);
+  });
+});
+```
+
+#### `.describe.only(name, fn)`
+Aliases: `.fdescribe(name, fn)`
+
+```js
+each([
+  [1, 1, 2],
+  [1, 2, 3],
+  [2, 1, 3],
+]).describe.only('.add(%s, %s)', (a, b, expected) => {
+  test(`returns ${expected}`, () => {
+    expect(add(a, b)).toBe(expected);
+  });
+});
+```
+
+#### `.describe.skip(name, fn)`
+Aliases: `.xdescribe(name, fn)`
+
+```js
+each([
+  [1, 1, 2],
+  [1, 2, 3],
+  [2, 1, 3],
+]).describe.skip('.add(%s, %s)', (a, b, expected) => {
+  test(`returns ${expected}`, () => {
+    expect(add(a, b)).toBe(expected);
+  });
 });
 ```
 
