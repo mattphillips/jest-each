@@ -1,8 +1,16 @@
-# jest-each
+<div align="center">
+  <h1>jest-each</h1>
+  Jest Parameterised Testing
+</div>
 
-[![npm version](https://badge.fury.io/js/jest-each.svg)](https://badge.fury.io/js/jest-each)
-[![Build Status](https://travis-ci.org/mattphillips/jest-each.svg?branch=master)](https://travis-ci.org/mattphillips/jest-each)
-[![Coverage Status](https://coveralls.io/repos/github/mattphillips/jest-each/badge.svg?branch=master)](https://coveralls.io/github/mattphillips/jest-each?branch=master)
+<hr />
+
+[![Build Status](https://img.shields.io/travis/mattphillips/jest-each.svg?style=flat-square)](https://travis-ci.org/mattphillips/jest-each)
+[![Code Coverage](https://img.shields.io/coveralls/mattphillips/jest-each.svg?style=flat-square)](https://coveralls.io/github/mattphillips/jest-each?branch=master)
+[![version](https://img.shields.io/npm/v/jest-each.svg?style=flat-square)](https://www.npmjs.com/package/jest-each)
+[![MIT License](https://img.shields.io/npm/l/jest-each.svg?style=flat-square)](https://github.com/mattphillips/jest-each/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Examples](https://img.shields.io/badge/%F0%9F%92%A1-examples-ff615b.svg?style=flat-square)](https://github.com/mattphillips/jest-each/tree/master/examples)
 
 A parameterised testing library for [Jest](https://facebook.github.io/jest/) inspired by [mocha-each](https://github.com/ryym/mocha-each).
 
