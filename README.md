@@ -8,6 +8,7 @@
 [![Build Status](https://img.shields.io/travis/mattphillips/jest-each.svg?style=flat-square)](https://travis-ci.org/mattphillips/jest-each)
 [![Code Coverage](https://img.shields.io/coveralls/mattphillips/jest-each.svg?style=flat-square)](https://coveralls.io/github/mattphillips/jest-each?branch=master)
 [![version](https://img.shields.io/npm/v/jest-each.svg?style=flat-square)](https://www.npmjs.com/package/jest-each)
+[![downloads](https://img.shields.io/npm/dm/jest-each.svg?style=flat-square)](http://npm-stat.com/charts.html?package=jest-each&from=2017-03-21)
 [![MIT License](https://img.shields.io/npm/l/jest-each.svg?style=flat-square)](https://github.com/mattphillips/jest-each/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Examples](https://img.shields.io/badge/%F0%9F%92%A1-examples-ff615b.svg?style=flat-square)](https://github.com/mattphillips/jest-each/tree/master/examples)
