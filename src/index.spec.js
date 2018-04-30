@@ -106,7 +106,8 @@ describe('jest-each', () => {
   [
     ['xtest'],
     ['test', 'skip'],
-    ['xit']
+    ['xit'],
+    ['it', 'skip']
   ].forEach(keyPath => {
     describe(`.${keyPath.join('.')}`, () => {
       const getGlobalTestMocks = () => {
@@ -115,7 +116,9 @@ describe('jest-each', () => {
             skip: jest.fn()
           },
           xtest: jest.fn(),
-          it: {},
+          it: {
+            skip: jest.fn()
+          },
           xit: jest.fn(),
           describe: {},
         };
@@ -163,42 +166,6 @@ describe('jest-each', () => {
         expect(globalMock).toHaveBeenCalledTimes(1);
         expect(typeof globalMock.mock.calls[0][1] === 'function').toBe(true);
       });
-    });
-  });
-
-  describe('.it.skip', () => {
-    test('calls global it skip with given title', () => {
-      const globalItSkipMock = { it: { skip: jest.fn() }, test: {}, describe: {} };
-      each([[]], globalItSkipMock).it.skip('expected string', () => {});
-
-      expect(globalItSkipMock.it.skip.mock.calls.length).toBe(1);
-      expect(globalItSkipMock.it.skip.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global it skip with given title when multiple tests cases exist', () => {
-      const globalItSkipMock = { it: { skip: jest.fn() }, test: {}, describe: {} };
-      each([[], []], globalItSkipMock).it.skip('expected string', () => {});
-
-      expect(globalItSkipMock.it.skip.mock.calls.length).toBe(2);
-      expect(globalItSkipMock.it.skip.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global it skip with title containing param values when using sprintf format', () => {
-      const globalItSkipMock = { it: { skip: jest.fn() }, test: {}, describe: {} };
-      each([['hello', 1], ['world', 2]], globalItSkipMock).it.skip('expected string: %s %s', () => {});
-
-      expect(globalItSkipMock.it.skip.mock.calls.length).toBe(2);
-      expect(globalItSkipMock.it.skip.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalItSkipMock.it.skip.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global it skip with cb function', () => {
-      const globalItSkipMock = { it: { skip: jest.fn() }, test: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalItSkipMock).it.skip('expected string', testCallBack);
-
-      expect(globalItSkipMock.it.skip.mock.calls.length).toBe(1);
-      expect(typeof globalItSkipMock.it.skip.mock.calls[0][1] === 'function').toBe(true);
     });
   });
 
