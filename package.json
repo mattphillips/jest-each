@@ -8,7 +8,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "babel src -d dist --ignore *.spec.js",
+    "build": "babel src -d dist --ignore *.test.js",
     "prepublish": "npm run build",
     "test": "jest --testPathPattern=src",
     "test:coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
