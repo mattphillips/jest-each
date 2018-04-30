@@ -33,6 +33,16 @@ jest-each allows you to provide multiple arguments to your `test`/`describe` whi
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
  - 🖖 Spock like data tables with [Tagged Template Literals](#tagged-template-literal-of-rows)
 
+---
+
+ - [Demo](#demo)
+ - [Installation](#installation)
+ - [Importing](#importing)
+ - APIs
+   * [Array of Rows](#array-of-rows)
+     - [Usage](#usage)
+   * [Tagged Template Literal of rows](#tagged-template-literal-of-rows)
+     - [Usage](#usage-1)
 
 ## Demo
 
