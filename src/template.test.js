@@ -1,4 +1,4 @@
-import each from './template';
+import each from './';
 
 const noop = () => {};
 const expectFunction = expect.any(Function);
@@ -33,7 +33,7 @@ describe('jest-each', () => {
 
       test('throws error when there are fewer arguments than headings when given one row', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} |
         `;
@@ -49,7 +49,7 @@ describe('jest-each', () => {
 
       test('throws error when there are fewer arguments than headings over multiple rows', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} |
@@ -66,7 +66,7 @@ describe('jest-each', () => {
 
       test('calls global with given title', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
         `;
@@ -80,7 +80,7 @@ describe('jest-each', () => {
 
       test('calls global with given title when multiple tests cases exist', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} | ${2}
@@ -96,7 +96,7 @@ describe('jest-each', () => {
 
       test('calls global with title containing param values when using $variable format', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} | ${2}
@@ -113,7 +113,7 @@ describe('jest-each', () => {
       test('calls global with cb function with object built from tabel headings and values', () => {
         const globalTestMocks = getGlobalTestMocks();
         const testCallBack = jest.fn();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} | ${2}
@@ -134,7 +134,7 @@ describe('jest-each', () => {
 
       test('calls global with async done when cb function has more than one argument', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
         `;
@@ -179,7 +179,7 @@ describe('jest-each', () => {
 
       test('calls global with given title', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
         `;
@@ -193,7 +193,7 @@ describe('jest-each', () => {
 
       test('calls global with given title when multiple tests cases exist', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} | ${2}
@@ -209,7 +209,7 @@ describe('jest-each', () => {
 
       test('calls global with title containing param values when using $variable format', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each(globalTestMocks)`
+        const eachObject = each.withGlobal(globalTestMocks)`
           a    | b    | expected
           ${0} | ${1} | ${1}
           ${1} | ${1} | ${2}
