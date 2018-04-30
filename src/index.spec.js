@@ -103,49 +103,16 @@ describe('jest-each', () => {
     });
   });
 
-  describe('.test.skip', () => {
-    test('calls global test with given title', () => {
-      const globalTestSkipMock = { test: { skip: jest.fn() }, it: {}, describe: {} };
-      each([[]], globalTestSkipMock).test.skip('expected string', () => {});
-
-      expect(globalTestSkipMock.test.skip.mock.calls.length).toBe(1);
-      expect(globalTestSkipMock.test.skip.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global test with given title when multiple tests cases exist', () => {
-      const globalTestSkipMock = { test: { skip: jest.fn() }, it: {}, describe: {} };
-      each([[], []], globalTestSkipMock).test.skip('expected string', () => {});
-
-      expect(globalTestSkipMock.test.skip.mock.calls.length).toBe(2);
-      expect(globalTestSkipMock.test.skip.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global test with title containing param values when using sprintf format', () => {
-      const globalTestSkipMock = { test: { skip: jest.fn() }, it: {}, describe: {} };
-      each([['hello', 1], ['world', 2]], globalTestSkipMock).test.skip('expected string: %s %s', () => {});
-
-      expect(globalTestSkipMock.test.skip.mock.calls.length).toBe(2);
-      expect(globalTestSkipMock.test.skip.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalTestSkipMock.test.skip.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global test with cb function', () => {
-      const globalTestSkipMock = { test: { skip: jest.fn() }, it: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalTestSkipMock).test.skip('expected string', testCallBack);
-
-      expect(globalTestSkipMock.test.skip.mock.calls.length).toBe(1);
-      expect(typeof globalTestSkipMock.test.skip.mock.calls[0][1] === 'function').toBe(true);
-    });
-  });
-
   [
-    ['xtest']
+    ['xtest'],
+    ['test', 'skip']
   ].forEach(keyPath => {
     describe(`.${keyPath.join('.')}`, () => {
       const getGlobalTestMocks = () => {
         const globals = {
-          test: {},
+          test: {
+            skip: jest.fn()
+          },
           it: {},
           describe: {},
           xtest: jest.fn()
