@@ -30,20 +30,26 @@ export default defaultGlobal => ([headings], ...data) => {
 
   const globalTest = defaultGlobal.test;
   const test = tests(globalTest);
+  test.skip = tests(globalTest.skip);
   test.only = tests(globalTest.only);
 
   const globalIt = defaultGlobal.it;
   const it = tests(globalIt);
+  it.skip = tests(globalIt.skip);
   it.only = tests(globalIt.only);
 
+  const xtest = tests(defaultGlobal.xtest);
+  const xit = tests(defaultGlobal.xit);
   const fit = tests(defaultGlobal.fit);
 
   const globalDescribe = defaultGlobal.describe;
   const describe = tests(globalDescribe);
+  describe.skip = tests(globalDescribe.skip);
   describe.only = tests(globalDescribe.only);
   const fdescribe = tests(defaultGlobal.fdescribe);
+  const xdescribe = tests(defaultGlobal.xdescribe);
 
-  return { test, it, fit, describe, fdescribe };
+  return { test, xtest, it, xit, fit, describe, fdescribe, xdescribe };
 };
 
 const notEnoughDataError = (keys, data) => cb => title =>

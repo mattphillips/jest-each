@@ -149,4 +149,79 @@ describe('jest-each', () => {
       });
     });
   });
+
+  [
+    ['xtest'],
+    ['test', 'skip'],
+    ['xit'],
+    ['it', 'skip'],
+    ['xdescribe'],
+    ['describe', 'skip'],
+  ].forEach(keyPath => {
+    describe(`.${keyPath.join('.')}`, () => {
+      const getGlobalTestMocks = () => {
+        const globals = {
+          test: {
+            skip: jest.fn()
+          },
+          xtest: jest.fn(),
+          it: {
+            skip: jest.fn()
+          },
+          xit: jest.fn(),
+          describe: {
+            skip: jest.fn()
+          },
+          xdescribe: jest.fn(),
+        };
+        return globals;
+      };
+
+      test('calls global with given title', () => {
+        const globalTestMocks = getGlobalTestMocks();
+        const eachObject = each(globalTestMocks)`
+          a    | b    | expected
+          ${0} | ${1} | ${1}
+        `;
+        const testFunction = get(eachObject, keyPath);
+        testFunction('expected string', noop);
+
+        const globalMock = get(globalTestMocks, keyPath);
+        expect(globalMock).toHaveBeenCalledTimes(1);
+        expect(globalMock).toHaveBeenCalledWith('expected string', expectFunction);
+      });
+
+      test('calls global with given title when multiple tests cases exist', () => {
+        const globalTestMocks = getGlobalTestMocks();
+        const eachObject = each(globalTestMocks)`
+          a    | b    | expected
+          ${0} | ${1} | ${1}
+          ${1} | ${1} | ${2}
+        `;
+        const testFunction = get(eachObject, keyPath);
+        testFunction('expected string', noop);
+
+        const globalMock = get(globalTestMocks, keyPath);
+        expect(globalMock).toHaveBeenCalledTimes(2);
+        expect(globalMock).toHaveBeenCalledWith('expected string', expectFunction);
+        expect(globalMock).toHaveBeenCalledWith('expected string', expectFunction);
+      });
+
+      test('calls global with title containing param values when using $variable format', () => {
+        const globalTestMocks = getGlobalTestMocks();
+        const eachObject = each(globalTestMocks)`
+          a    | b    | expected
+          ${0} | ${1} | ${1}
+          ${1} | ${1} | ${2}
+        `;
+        const testFunction = get(eachObject, keyPath);
+        testFunction('expected string: a=$a, b=$b, expected=$expected', noop);
+
+        const globalMock = get(globalTestMocks, keyPath);
+        expect(globalMock).toHaveBeenCalledTimes(2);
+        expect(globalMock).toHaveBeenCalledWith('expected string: a=0, b=1, expected=1', expectFunction);
+        expect(globalMock).toHaveBeenCalledWith('expected string: a=1, b=1, expected=2', expectFunction);
+      });
+    });
+  });
 });
