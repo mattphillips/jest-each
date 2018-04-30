@@ -55,7 +55,7 @@ export default defaultGlobal => ([headings], ...data) => {
 const notEnoughDataError = (keys, data) => cb => title =>
   cb(title, () => {
     throw new Error(
-      `Data driven test error:\nNot enough arguments supplied for given headings: ${keys.join(
+      `Tagged Template Literal test error:\nNot enough arguments supplied for given headings: ${keys.join(
         ' | '
       )}\nReceived: ${data}`
     );
