@@ -31,6 +31,39 @@ describe('jest-each', () => {
         return globals;
       };
 
+      test('throws error when there are fewer arguments than headings when given one row', () => {
+        const globalTestMocks = getGlobalTestMocks();
+        const eachObject = each(globalTestMocks)`
+          a    | b    | expected
+          ${0} | ${1} |
+        `;
+        const testFunction = get(eachObject, keyPath);
+        const testCallBack = jest.fn();
+        testFunction('this will blow up :(', testCallBack);
+
+        const globalMock = get(globalTestMocks, keyPath);
+
+        expect(() => globalMock.mock.calls[0][1]()).toThrowErrorMatchingSnapshot();
+        expect(testCallBack).not.toHaveBeenCalled();
+      });
+
+      test('throws error when there are fewer arguments than headings over multiple rows', () => {
+        const globalTestMocks = getGlobalTestMocks();
+        const eachObject = each(globalTestMocks)`
+          a    | b    | expected
+          ${0} | ${1} | ${1}
+          ${1} | ${1} |
+        `;
+        const testFunction = get(eachObject, keyPath);
+        const testCallBack = jest.fn();
+        testFunction('this will blow up :(', testCallBack);
+
+        const globalMock = get(globalTestMocks, keyPath);
+
+        expect(() => globalMock.mock.calls[0][1]()).toThrowErrorMatchingSnapshot();
+        expect(testCallBack).not.toHaveBeenCalled();
+      });
+
       test('calls global with given title', () => {
         const globalTestMocks = getGlobalTestMocks();
         const eachObject = each(globalTestMocks)`

@@ -3,9 +3,27 @@ export default defaultGlobal => ([headings], ...data) => {
 
   const keysLength = keys.length;
 
-  const parameterRows = Array
-    .from({ length: data.length / keysLength })
-    .map((_, index) => data.slice((index * keysLength), (index * keysLength) + keysLength))
+  if (data.length % keysLength !== 0) {
+    const errorFunction = notEnoughDataError(keys, data);
+
+    const test = errorFunction(defaultGlobal.test);
+    test.only = errorFunction(defaultGlobal.test.only);
+
+    const it = errorFunction(defaultGlobal.it);
+    it.only = errorFunction(defaultGlobal.it.only);
+
+    const fit = errorFunction(defaultGlobal.fit);
+
+    const describe = errorFunction(defaultGlobal.describe);
+    describe.only = errorFunction(defaultGlobal.describe.only);
+
+    const fdescribe = errorFunction(defaultGlobal.fdescribe);
+
+    return { test, it, fit, describe, fdescribe };
+  }
+
+  const parameterRows = Array.from({ length: data.length / keysLength })
+    .map((_, index) => data.slice(index * keysLength, index * keysLength + keysLength))
     .map(row => row.reduce((acc, value, index) => ({ ...acc, [keys[index]]: value }), {}));
 
   const tests = parameterisedTests(parameterRows);
@@ -27,6 +45,15 @@ export default defaultGlobal => ([headings], ...data) => {
 
   return { test, it, fit, describe, fdescribe };
 };
+
+const notEnoughDataError = (keys, data) => cb => title =>
+  cb(title, () => {
+    throw new Error(
+      `Data driven test error:\nNot enough arguments supplied for given headings: ${keys.join(
+        ' | '
+      )}\nReceived: ${data}`
+    );
+  });
 
 const getHeadingKeys = headings => headings.replace(/\s/g, '').split('|');
 
