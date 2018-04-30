@@ -105,7 +105,8 @@ describe('jest-each', () => {
 
   [
     ['xtest'],
-    ['test', 'skip']
+    ['test', 'skip'],
+    ['xit']
   ].forEach(keyPath => {
     describe(`.${keyPath.join('.')}`, () => {
       const getGlobalTestMocks = () => {
@@ -113,9 +114,10 @@ describe('jest-each', () => {
           test: {
             skip: jest.fn()
           },
+          xtest: jest.fn(),
           it: {},
+          xit: jest.fn(),
           describe: {},
-          xtest: jest.fn()
         };
         return globals;
       };
@@ -197,42 +199,6 @@ describe('jest-each', () => {
 
       expect(globalItSkipMock.it.skip.mock.calls.length).toBe(1);
       expect(typeof globalItSkipMock.it.skip.mock.calls[0][1] === 'function').toBe(true);
-    });
-  });
-
-  describe('.xit', () => {
-    test('calls global xit with given title', () => {
-      const globalXItMock = { test: {}, it: {}, xit: jest.fn(), describe: {} };
-      each([[]], globalXItMock).xit('expected string', () => {});
-
-      expect(globalXItMock.xit.mock.calls.length).toBe(1);
-      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global xit with given title when multiple tests cases exist', () => {
-      const globalXItMock = { test: {}, it: {}, xit: jest.fn(), describe: {} };
-      each([[], []], globalXItMock).xit('expected string', () => {});
-
-      expect(globalXItMock.xit.mock.calls.length).toBe(2);
-      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global xit with title containing param values when using sprintf format', () => {
-      const globalXItMock = { test: {}, it: {}, xit: jest.fn(), describe: {} };
-      each([['hello', 1], ['world', 2]], globalXItMock).xit('expected string: %s %s', () => {});
-
-      expect(globalXItMock.xit.mock.calls.length).toBe(2);
-      expect(globalXItMock.xit.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalXItMock.xit.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global xit with cb function', () => {
-      const globalXItMock = { test: {}, it: {}, xit: jest.fn(), describe: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalXItMock).xit('expected string', testCallBack);
-
-      expect(globalXItMock.xit.mock.calls.length).toBe(1);
-      expect(typeof globalXItMock.xit.mock.calls[0][1] === 'function').toBe(true);
     });
   });
 
