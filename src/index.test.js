@@ -63,16 +63,6 @@ describe('jest-each', () => {
         expect(globalMock).toHaveBeenCalledWith('expected string: world 2', expectFunction);
       });
 
-      test('calls global with cb function', () => {
-        const globalTestMocks = getGlobalTestMocks();
-        const testObject = each([[]], globalTestMocks)
-        get(testObject, keyPath)('expected string', noop);
-
-        const globalMock = get(globalTestMocks, keyPath);
-        expect(globalMock).toHaveBeenCalledTimes(1);
-        expect(typeof globalMock.mock.calls[0][1] === 'function').toBe(true);
-      });
-
       test('calls global with cb function containing all parameters of each test case', () => {
         const globalTestMocks = getGlobalTestMocks();
         const testCallBack = jest.fn();
@@ -159,17 +149,6 @@ describe('jest-each', () => {
         expect(globalMock).toHaveBeenCalledTimes(2);
         expect(globalMock).toHaveBeenCalledWith('expected string: hello 1', expectFunction);
         expect(globalMock).toHaveBeenCalledWith('expected string: world 2', expectFunction);
-      });
-
-      test('calls global with cb function', () => {
-        const globalTestMocks = getGlobalTestMocks();
-        const testCallBack = jest.fn();
-        const testObject = each([[]], globalTestMocks)
-        get(testObject, keyPath)('expected string', testCallBack);
-
-        const globalMock = get(globalTestMocks, keyPath);
-        expect(globalMock).toHaveBeenCalledTimes(1);
-        expect(typeof globalMock.mock.calls[0][1] === 'function').toBe(true);
       });
     });
   });
