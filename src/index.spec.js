@@ -5,10 +5,10 @@ const expectFunction = expect.any(Function);
 
 describe('jest-each', () => {
 
-  [['test'], ['it'], ['describe'], ['fit']].forEach(([property]) => {
+  [['test'], ['it'], ['fit'], ['describe'], ['fdescribe']].forEach(([property]) => {
     describe(`.${property}`, () => {
       test('calls global with given title', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         each([[]], globalTestMock)[property]('expected string', noop);
 
         expect(globalTestMock[property]).toHaveBeenCalledTimes(1);
@@ -19,7 +19,7 @@ describe('jest-each', () => {
       });
 
       test('calls global with given title when multiple tests cases exist', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         each([[], []], globalTestMock)[property]('expected string', () => {});
 
         expect(globalTestMock[property]).toHaveBeenCalledTimes(2);
@@ -34,7 +34,7 @@ describe('jest-each', () => {
       });
 
       test('calls global with title containing param values when using sprintf format', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         each([['hello', 1], ['world', 2]], globalTestMock)[property](
           'expected string: %s %s',
           () => {},
@@ -52,7 +52,7 @@ describe('jest-each', () => {
       });
 
       test('calls global with cb function', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         each([[]], globalTestMock)[property]('expected string', () => {});
 
         expect(globalTestMock[property]).toHaveBeenCalledTimes(1);
@@ -62,7 +62,7 @@ describe('jest-each', () => {
       });
 
       test('calls global with cb function containing all parameters of each test case', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         const testCallBack = jest.fn();
         each([['hello', 'world'], ['joe', 'bloggs']], globalTestMock)[property](
           'expected string',
@@ -79,7 +79,7 @@ describe('jest-each', () => {
       });
 
       test('calls global with async done when cb function has more args than params of given test row', () => {
-        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn() };
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn(), fit: jest.fn(), fdescribe: jest.fn() };
         each([['hello']], globalTestMock)[property](
           'expected string',
           (hello, done) => {
@@ -429,71 +429,6 @@ describe('jest-each', () => {
       });
 
       globalMock.xdescribe.mock.calls[0][1]('DONE');
-    });
-  });
-
-  describe('.fdescribe', () => {
-    test('calls global fdescribe with given title', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      each([[]], globalMock).fdescribe('expected string', () => {});
-
-      expect(globalMock.fdescribe.mock.calls.length).toBe(1);
-      expect(globalMock.fdescribe.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global fdescribe with given title when multiple tests cases exist', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      each([[], []], globalMock).fdescribe('expected string', () => {});
-
-      expect(globalMock.fdescribe.mock.calls.length).toBe(2);
-      expect(globalMock.fdescribe.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global fdescribe with title containing param values when using sprintf format', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      each([['hello', 1], ['world', 2]], globalMock).fdescribe('expected string: %s %s', () => {});
-
-      expect(globalMock.fdescribe.mock.calls.length).toBe(2);
-      expect(globalMock.fdescribe.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalMock.fdescribe.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global fdescribe with cb function', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalMock).fdescribe('expected string', testCallBack);
-
-      expect(globalMock.fdescribe.mock.calls.length).toBe(1);
-      expect(typeof globalMock.fdescribe.mock.calls[0][1] === 'function').toBe(true);
-    });
-
-    test('calls global fdescribe with cb function containing all parameters of first row when multiple test cases exist', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([
-        ['hello', 'world'],
-        ['joe', 'bloggs'],
-      ], globalMock).fdescribe('expected string', testCallBack);
-
-      globalMock.fdescribe.mock.calls[0][1]();
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-
-      globalMock.fdescribe.mock.calls[1][1]();
-      expect(testCallBack.mock.calls.length).toBe(2);
-      expect(testCallBack.mock.calls[1][0]).toBe('joe');
-      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
-    });
-
-    test('calls global fdescribe with async done when cb function has more args than params of given test row', () => {
-      const globalMock = { fdescribe: jest.fn(), describe: {}, fit: {}, it: {}, test: {} };
-      each([['hello']], globalMock).fdescribe('expected string', (hello, done) => {
-        expect(hello).toBe('hello');
-        expect(done).toBe('DONE');
-      });
-
-      globalMock.fdescribe.mock.calls[0][1]('DONE');
     });
   });
 
