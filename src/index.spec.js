@@ -6,7 +6,16 @@ const expectFunction = expect.any(Function);
 const get = (object, lensPath) => lensPath.reduce((acc, key) => acc[key], object);
 
 describe('jest-each', () => {
-  [['test'], ['test', 'only'], ['it', 'only'], ['it'], ['fit'], ['describe'], ['fdescribe']].forEach(keyPath => {
+  [
+    ['test'],
+    ['test', 'only'],
+    ['it'],
+    ['fit'],
+    ['it', 'only'],
+    ['describe'],
+    ['fdescribe'],
+    ['describe', 'only']
+  ].forEach(keyPath => {
     describe(`.${keyPath.join('.')}`, () => {
       const getGlobalTestMocks = () => {
         const globals = {
@@ -18,6 +27,7 @@ describe('jest-each', () => {
         };
         globals.test.only = jest.fn();
         globals.it.only = jest.fn();
+        globals.describe.only = jest.fn();
         return globals;
       };
 
@@ -361,65 +371,4 @@ describe('jest-each', () => {
     });
   });
 
-  describe('.describe.only', () => {
-    test('calls global describe.only with given title', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      each([[]], globalMock).describe.only('expected string', () => {});
-
-      expect(globalMock.describe.only.mock.calls.length).toBe(1);
-      expect(globalMock.describe.only.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global describe.only with given title when multiple tests cases exist', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      each([[], []], globalMock).describe.only('expected string', () => {});
-
-      expect(globalMock.describe.only.mock.calls.length).toBe(2);
-      expect(globalMock.describe.only.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global describe.only with title containing param values when using sprintf format', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      each([['hello', 1], ['world', 2]], globalMock).describe.only('expected string: %s %s', () => {});
-
-      expect(globalMock.describe.only.mock.calls.length).toBe(2);
-      expect(globalMock.describe.only.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalMock.describe.only.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global describe.only with cb function', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalMock).describe.only('expected string', testCallBack);
-
-      expect(globalMock.describe.only.mock.calls.length).toBe(1);
-      expect(typeof globalMock.describe.only.mock.calls[0][1] === 'function').toBe(true);
-    });
-
-    test('calls global describe.only with cb function containing all parameters of first row when multiple test cases exist', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([['hello', 'world'], ['joe', 'bloggs']], globalMock).describe.only('expected string', testCallBack);
-
-      globalMock.describe.only.mock.calls[0][1]();
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-
-      globalMock.describe.only.mock.calls[1][1]();
-      expect(testCallBack.mock.calls.length).toBe(2);
-      expect(testCallBack.mock.calls[1][0]).toBe('joe');
-      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
-    });
-
-    test('calls global describe.only with async done when cb function has more args than params of given test row', () => {
-      const globalMock = { fdescribe: {}, describe: { only: jest.fn(), skip: {} }, fit: {}, it: {}, test: {} };
-      each([['hello']], globalMock).describe.only('expected string', (hello, done) => {
-        expect(hello).toBe('hello');
-        expect(done).toBe('DONE');
-      });
-
-      globalMock.describe.only.mock.calls[0][1]('DONE');
-    });
-  });
 });
