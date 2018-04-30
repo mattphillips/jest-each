@@ -56,6 +56,10 @@ jest-each allows you to provide multiple arguments to your `test`/`describe` whi
 
 ![Current jest tests](assets/test-demo.gif)
 
+**`.test` with Tagged Template Literals**
+
+![Current jest tests](assets/tagged-template-literal.gif)
+
 **`.describe`**
 
 ![Current jest tests](assets/describe-demo.gif)
