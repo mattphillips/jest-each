@@ -1,4 +1,4 @@
-import each from './';
+import each from './array';
 
 const noop = () => {};
 const expectFunction = expect.any(Function);
