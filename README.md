@@ -31,6 +31,7 @@ jest-each allows you to provide multiple arguments to your `test`/`describe` whi
    * Also under the aliases: `.xdescribe`
  - Asynchronous tests with `done`
  - Unique test titles with: [sprintf](https://github.com/alexei/sprintf.js)
+ - 🖖 Spock like data tables with [Tagged Template Literals](#tagged-template-literal-of-rows)
 
 
 ## Demo
@@ -67,41 +68,40 @@ import each from 'jest-each';
 const each = require('jest-each');
 ```
 
-## API
+## Array of rows
 
-### `each([parameters]).test(name, testFn)`
+### API
 
-#### `each`:
+#### `each([parameters]).test(name, testFn)`
+
+##### `each`:
   - parameters: `Array` of Arrays with the arguments that are passed into the `testFn` for each row
 
-#### `.test`:
+##### `.test`:
   - name: `String` the title of the `test`, use `%s` in the name string to positionally inject parameter values into the test title
   - testFn: `Function` the test logic, this is the function that will receive the parameters of each row as function arguments
 
-### `each([parameters]).describe(name, suiteFn)`
+#### `each([parameters]).describe(name, suiteFn)`
 
-#### `each`:
+##### `each`:
   - parameters: `Array` of Arrays with the arguments that are passed into the `suiteFn` for each row
 
-#### `.describe`:
+##### `.describe`:
   - name: `String` the title of the `describe`, use `%s` in the name string to positionally inject parameter values into the suite title
   - suiteFn: `Function` the suite of `test`/`it`s to be ran, this is the function that will receive the parameters in each row as function arguments
 
-## Usage
+### Usage
 
 #### `.test(name, fn)`
 Alias: `.it(name, fn)`
 
 ```js
-import each from 'jest-each';
-import add from './add';
-
 each([
   [1, 1, 2],
   [1, 2, 3],
   [2, 1, 3],
 ]).test('returns the result of adding %s to %s', (a, b, expected) => {
-  expect(add(a, b)).toBe(expected);
+  expect(a + b).toBe(expected);
 });
 ```
 
@@ -114,7 +114,7 @@ each([
   [1, 2, 3],
   [2, 1, 3],
 ]).test.only('returns the result of adding %s to %s', (a, b, expected) => {
-  expect(add(a, b)).toBe(expected);
+  expect(a + b).toBe(expected);
 });
 ```
 
@@ -127,7 +127,7 @@ each([
   [1, 2, 3],
   [2, 1, 3],
 ]).test.skip('returns the result of adding %s to %s', (a, b, expected) => {
-  expect(add(a, b)).toBe(expected);
+  expect(a + b).toBe(expected);
 });
 ```
 
@@ -151,25 +151,22 @@ each([
 #### `.describe(name, fn)`
 
 ```js
-import each from 'jest-each';
-import add from './add';
-
 each([
   [1, 1, 2],
   [1, 2, 3],
   [2, 1, 3],
 ]).describe('.add(%s, %s)', (a, b, expected) => {
   test(`returns ${expected}`, () => {
-    expect(add(a, b)).toBe(expected);
+    expect(a + b).toBe(expected);
   });
 
   test('does not mutate first arg', () => {
-    add(a, b);
+    a + b;
     expect(a).toBe(a);
   });
 
   test('does not mutate second arg', () => {
-    add(a, b);
+    a + b;
     expect(b).toBe(b);
   });
 });
@@ -185,7 +182,7 @@ each([
   [2, 1, 3],
 ]).describe.only('.add(%s, %s)', (a, b, expected) => {
   test(`returns ${expected}`, () => {
-    expect(add(a, b)).toBe(expected);
+    expect(a + b).toBe(expected);
   });
 });
 ```
@@ -200,7 +197,186 @@ each([
   [2, 1, 3],
 ]).describe.skip('.add(%s, %s)', (a, b, expected) => {
   test(`returns ${expected}`, () => {
-    expect(add(a, b)).toBe(expected);
+    expect(a + b).toBe(expected);
+  });
+});
+```
+
+---
+
+## Tagged Template Literal of rows
+
+### API
+
+#### `each[tagged template].test(name, suiteFn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.test('returns $expected when adding $a to $b', ({ a, b, expected }) => {
+  expect(a + b).toBe(expected);
+});
+```
+
+##### `each` takes a tagged template string with:
+ - First row of variable name column headings seperated with `|`
+ - One or more subsequent rows of data supplied as template literal expressions using `${value}` syntax.
+
+##### `.test`:
+  - name: `String` the title of the `test`, use `$variable` in the name string to inject test values into the test title from the tagged template expressions
+  - testFn: `Function` the test logic, this is the function that will receive the parameters of each row as function arguments
+
+#### `each[tagged template].describe(name, suiteFn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.describe('$a + $b', ({ a, b, expected }) => {
+  test(`returns ${expected}`, () => {
+    expect(a + b).toBe(expected);
+  });
+
+  test('does not mutate first arg', () => {
+    a + b;
+    expect(a).toBe(a);
+  });
+
+  test('does not mutate second arg', () => {
+    a + b;
+    expect(b).toBe(b);
+  });
+});
+```
+
+##### `each` takes a tagged template string with:
+ - First row of variable name column headings seperated with `|`
+ - One or more subsequent rows of data supplied as template literal expressions using `${value}` syntax.
+
+##### `.describe`:
+  - name: `String` the title of the `test`, use `$variable` in the name string to inject test values into the test title from the tagged template expressions
+  - suiteFn: `Function` the suite of `test`/`it`s to be ran, this is the function that will receive the parameters in each row as function arguments
+
+### Usage
+
+#### `.test(name, fn)`
+Alias: `.it(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.test('returns $expected when adding $a to $b', ({ a, b, expected }) => {
+  expect(a + b).toBe(expected);
+});
+```
+
+#### `.test.only(name, fn)`
+Aliases: `.it.only(name, fn)` or `.fit(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.test.only('returns $expected when adding $a to $b', ({ a, b, expected }) => {
+  expect(a + b).toBe(expected);
+});
+```
+
+#### `.test.skip(name, fn)`
+Aliases: `.it.skip(name, fn)` or `.xit(name, fn)` or `.xtest(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.test.skip('returns $expected when adding $a to $b', ({ a, b, expected }) => {
+  expect(a + b).toBe(expected);
+});
+```
+
+#### Asynchronous `.test(name, fn(done))`
+Alias: `.it(name, fn(done))`
+
+```js
+each`
+  str
+  ${'hello'}
+  ${'mr'}
+  ${'spy'}
+`.test('gives 007 secret message: $str', ({ str }, done) => {
+  const asynchronousSpy = (message) => {
+    expect(message).toBe(str);
+    done();
+  };
+  callSomeAsynchronousFunction(asynchronousSpy)(str);
+});
+```
+
+#### `.describe(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.describe('$a + $b', ({ a, b, expected }) => {
+  test(`returns ${expected}`, () => {
+    expect(a + b).toBe(expected);
+  });
+
+  test('does not mutate first arg', () => {
+    a + b;
+    expect(a).toBe(a);
+  });
+
+  test('does not mutate second arg', () => {
+    a + b;
+    expect(b).toBe(b);
+  });
+});
+```
+
+#### `.describe.only(name, fn)`
+Aliases: `.fdescribe(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.describe.only('$a + $b', ({ a, b, expected }) => {
+  test(`returns ${expected}`, () => {
+    expect(a + b).toBe(expected);
+  });
+});
+```
+
+#### `.describe.skip(name, fn)`
+Aliases: `.xdescribe(name, fn)`
+
+```js
+each`
+  a    | b    | expected
+  ${1} | ${1} | ${2}
+  ${1} | ${2} | ${3}
+  ${2} | ${1} | ${3}
+`.describe.skip('$a + $b', ({ a, b, expected }) => {
+  test(`returns ${expected}`, () => {
+    expect(a + b).toBe(expected);
   });
 });
 ```
