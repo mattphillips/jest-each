@@ -1,92 +1,123 @@
 import each from './';
 
+const noop = () => {};
+const expectFunction = expect.any(Function);
+
 describe('jest-each', () => {
-  describe('.test', () => {
-    test('calls global test with given title', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      each([[]], globalTestMock).test('expected string', () => {});
 
-      expect(globalTestMock.test.mock.calls.length).toBe(1);
-      expect(globalTestMock.test.mock.calls[0][0]).toBe('expected string');
-    });
+  [['test'], ['it'], ['describe']].forEach(([property]) => {
+    describe(`.${property}`, () => {
+      test('calls global with given title', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };
+        each([[]], globalTestMock)[property]('expected string', noop);
 
-    test('calls global test with given title when multiple tests cases exist', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      each([[], []], globalTestMock).test('expected string', () => {});
-
-      expect(globalTestMock.test.mock.calls.length).toBe(2);
-      expect(globalTestMock.test.mock.calls[0][0]).toBe('expected string');
-      expect(globalTestMock.test.mock.calls[1][0]).toBe('expected string');
-    });
-
-    test('calls global test with title containing param values when using sprintf format', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      each([['hello', 1], ['world', 2]], globalTestMock).test('expected string: %s %s', () => {});
-
-      expect(globalTestMock.test.mock.calls.length).toBe(2);
-      expect(globalTestMock.test.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalTestMock.test.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global test with cb function', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalTestMock).test('expected string', testCallBack);
-
-      expect(globalTestMock.test.mock.calls.length).toBe(1);
-      expect(typeof globalTestMock.test.mock.calls[0][1] === 'function').toBe(true);
-    });
-
-    test('calls global test with cb function containing parameters of first row', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([['hello']], globalTestMock).test('expected string', testCallBack);
-
-      globalTestMock.test.mock.calls[0][1]();
-
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-    });
-
-    test('calls global test with cb function containing all parameters of first row', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([['hello', 'world']], globalTestMock).test('expected string', testCallBack);
-
-      globalTestMock.test.mock.calls[0][1]();
-
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-    });
-
-    test('calls global test with cb function containing all parameters of first row when multiple test cases exist', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([
-        ['hello', 'world'],
-        ['joe', 'bloggs'],
-      ], globalTestMock).test('expected string', testCallBack);
-
-      globalTestMock.test.mock.calls[0][1]();
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-
-      globalTestMock.test.mock.calls[1][1]();
-      expect(testCallBack.mock.calls.length).toBe(2);
-      expect(testCallBack.mock.calls[1][0]).toBe('joe');
-      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
-    });
-
-    test('calls global test with async done when cb function has more args than params of given test row', () => {
-      const globalTestMock = { test: jest.fn(), it: {}, describe: {} };
-      each([['hello']], globalTestMock).test('expected string', (hello, done) => {
-        expect(hello).toBe('hello');
-        expect(done).toBe('DONE');
+        expect(globalTestMock[property]).toHaveBeenCalledTimes(1);
+        expect(globalTestMock[property]).toHaveBeenCalledWith(
+          'expected string',
+          expectFunction,
+        );
       });
 
-      globalTestMock.test.mock.calls[0][1]('DONE');
+      test('calls global with given title when multiple tests cases exist', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };
+        each([[], []], globalTestMock)[property]('expected string', () => {});
+
+        expect(globalTestMock[property]).toHaveBeenCalledTimes(2);
+        expect(globalTestMock[property]).toHaveBeenCalledWith(
+          'expected string',
+          expectFunction,
+        );
+        expect(globalTestMock[property]).toHaveBeenCalledWith(
+          'expected string',
+          expectFunction,
+        );
+      });
+
+      test('calls global with title containing param values when using sprintf format', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        each([['hello', 1], ['world', 2]], globalTestMock)[property](
+          'expected string: %s %s',
+          () => {},
+        );
+
+        expect(globalTestMock[property]).toHaveBeenCalledTimes(2);
+        expect(globalTestMock[property]).toHaveBeenCalledWith(
+          'expected string: hello 1',
+          expectFunction,
+        );
+        expect(globalTestMock[property]).toHaveBeenCalledWith(
+          'expected string: world 2',
+          expectFunction,
+        );
+      });
+
+      test('calls global with cb function', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        each([[]], globalTestMock)[property]('expected string', () => {});
+
+        expect(globalTestMock[property]).toHaveBeenCalledTimes(1);
+        expect(
+          typeof globalTestMock[property].mock.calls[0][1] === 'function',
+        ).toBe(true);
+      });
+
+      test('calls global with cb function containing parameters of first row', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        const testCallBack = jest.fn();
+        each([['hello']], globalTestMock)[property](
+          'expected string',
+          testCallBack,
+        );
+
+        globalTestMock[property].mock.calls[0][1]();
+
+        expect(testCallBack).toHaveBeenCalledTimes(1);
+        expect(testCallBack).toHaveBeenCalledWith('hello');
+      });
+
+      test('calls global with cb function containing all parameters of first row', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        const testCallBack = jest.fn();
+        each([['hello', 'world']], globalTestMock)[property](
+          'expected string',
+          testCallBack,
+        );
+
+        globalTestMock[property].mock.calls[0][1]();
+
+        expect(testCallBack).toHaveBeenCalledTimes(1);
+        expect(testCallBack).toHaveBeenCalledWith('hello', 'world');
+      });
+
+      test('calls global with cb function containing all parameters of first row when multiple test cases exist', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        const testCallBack = jest.fn();
+        each([['hello', 'world'], ['joe', 'bloggs']], globalTestMock)[property](
+          'expected string',
+          testCallBack,
+        );
+
+        globalTestMock[property].mock.calls[0][1]();
+        expect(testCallBack).toHaveBeenCalledTimes(1);
+        expect(testCallBack).toHaveBeenCalledWith('hello', 'world');
+
+        globalTestMock[property].mock.calls[1][1]();
+        expect(testCallBack).toHaveBeenCalledTimes(2);
+        expect(testCallBack).toHaveBeenCalledWith('joe', 'bloggs');
+      });
+
+      test('calls global with async done when cb function has more args than params of given test row', () => {
+        const globalTestMock = { test: jest.fn(), it: jest.fn(), describe: jest.fn() };        
+        each([['hello']], globalTestMock)[property](
+          'expected string',
+          (hello, done) => {
+            expect(hello).toBe('hello');
+            expect(done).toBe('DONE');
+          },
+        );
+
+        globalTestMock[property].mock.calls[0][1]('DONE');
+      });
     });
   });
 
@@ -188,95 +219,6 @@ describe('jest-each', () => {
       });
 
       globalTestOnlyMock.test.only.mock.calls[0][1]('DONE');
-    });
-  });
-
-  describe('.it', () => {
-    test('calls global it with given title', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      each([[]], globalItMock).it('expected string', () => {});
-
-      expect(globalItMock.it.mock.calls.length).toBe(1);
-      expect(globalItMock.it.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global it with given title when multiple it cases exist', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      each([[], []], globalItMock).it('expected string', () => {});
-
-      expect(globalItMock.it.mock.calls.length).toBe(2);
-      expect(globalItMock.it.mock.calls[0][0]).toBe('expected string');
-      expect(globalItMock.it.mock.calls[1][0]).toBe('expected string');
-    });
-
-    test('calls global it with title containing param values when using sprintf format', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      each([['hello', 1], ['world', 2]], globalItMock).it('expected string: %s %s', () => {});
-
-      expect(globalItMock.it.mock.calls.length).toBe(2);
-      expect(globalItMock.it.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalItMock.it.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global it with cb function', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalItMock).it('expected string', testCallBack);
-
-      expect(globalItMock.it.mock.calls.length).toBe(1);
-      expect(typeof globalItMock.it.mock.calls[0][1] === 'function').toBe(true);
-    });
-
-    test('calls global it with cb function containing parameters of first row', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([['hello']], globalItMock).it('expected string', testCallBack);
-
-      globalItMock.it.mock.calls[0][1]();
-
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-    });
-
-    test('calls global it with cb function containing all parameters of first row', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([['hello', 'world']], globalItMock).it('expected string', testCallBack);
-
-      globalItMock.it.mock.calls[0][1]();
-
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-    });
-
-    test('calls global it with cb function containing all parameters of first row when multiple it cases exist', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      const testCallBack = jest.fn();
-      each([
-        ['hello', 'world'],
-        ['joe', 'bloggs'],
-      ], globalItMock).it('expected string', testCallBack);
-
-      globalItMock.it.mock.calls[0][1]();
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-
-      globalItMock.it.mock.calls[1][1]();
-      expect(testCallBack.mock.calls.length).toBe(2);
-      expect(testCallBack.mock.calls[1][0]).toBe('joe');
-      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
-    });
-
-    test('calls global it with async done when cb function has more args than params of given it row', () => {
-      const globalItMock = { it: jest.fn(), test: {}, describe: {} };
-      each([['hello']], globalItMock).it('expected string', (hello, done) => {
-        expect(hello).toBe('hello');
-        expect(done).toBe('DONE');
-      });
-
-      globalItMock.it.mock.calls[0][1]('DONE');
     });
   });
 
@@ -515,71 +457,6 @@ describe('jest-each', () => {
       });
 
       globalFitMock.fit.mock.calls[0][1]('DONE');
-    });
-  });
-
-  describe('.describe', () => {
-    test('calls global describe with given title', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      each([[]], globalMock).describe('expected string', () => {});
-
-      expect(globalMock.describe.mock.calls.length).toBe(1);
-      expect(globalMock.describe.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global describe with given title when multiple tests cases exist', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      each([[], []], globalMock).describe('expected string', () => {});
-
-      expect(globalMock.describe.mock.calls.length).toBe(2);
-      expect(globalMock.describe.mock.calls[0][0]).toBe('expected string');
-    });
-
-    test('calls global describe with title containing param values when using sprintf format', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      each([['hello', 1], ['world', 2]], globalMock).describe('expected string: %s %s', () => {});
-
-      expect(globalMock.describe.mock.calls.length).toBe(2);
-      expect(globalMock.describe.mock.calls[0][0]).toBe('expected string: hello 1');
-      expect(globalMock.describe.mock.calls[1][0]).toBe('expected string: world 2');
-    });
-
-    test('calls global describe with cb function', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([[]], globalMock).describe('expected string', testCallBack);
-
-      expect(globalMock.describe.mock.calls.length).toBe(1);
-      expect(typeof globalMock.describe.mock.calls[0][1] === 'function').toBe(true);
-    });
-
-    test('calls global describe with cb function containing all parameters of first row when multiple test cases exist', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      const testCallBack = jest.fn();
-      each([
-        ['hello', 'world'],
-        ['joe', 'bloggs'],
-      ], globalMock).describe('expected string', testCallBack);
-
-      globalMock.describe.mock.calls[0][1]();
-      expect(testCallBack.mock.calls.length).toBe(1);
-      expect(testCallBack.mock.calls[0][0]).toBe('hello');
-      expect(testCallBack.mock.calls[0][1]).toBe('world');
-
-      globalMock.describe.mock.calls[1][1]();
-      expect(testCallBack.mock.calls.length).toBe(2);
-      expect(testCallBack.mock.calls[1][0]).toBe('joe');
-      expect(testCallBack.mock.calls[1][1]).toBe('bloggs');
-    });
-
-    test('calls global describe with async done when cb function has more args than params of given test row', () => {
-      const globalMock = { describe: jest.fn(), fit: {}, it: {}, test: {} };
-      each([['hello']], globalMock).describe('expected string', (hello, done) => {
-        expect(hello).toBe('hello');
-        expect(done).toBe('DONE');
-      });
-
-      globalMock.describe.mock.calls[0][1]('DONE');
     });
   });
 
