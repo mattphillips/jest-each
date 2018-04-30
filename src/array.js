@@ -1,6 +1,6 @@
 import { vsprintf } from 'sprintf-js';
 
-export default (parameterRows, defaultGlobal = global) => {
+export default defaultGlobal => parameterRows => {
 
   const tests = parameterisedTests(parameterRows);
 

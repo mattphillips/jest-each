@@ -1,1 +1,3 @@
-export default from './array';
+import each from './array';
+
+export default each(global);

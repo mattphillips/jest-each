@@ -33,8 +33,8 @@ describe('jest-each', () => {
 
       test('calls global with given title', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([[]], globalTestMocks);
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([[]]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string', noop);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -44,8 +44,8 @@ describe('jest-each', () => {
 
       test('calls global with given title when multiple tests cases exist', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([[], []], globalTestMocks);
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([[], []]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string', noop);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -56,8 +56,8 @@ describe('jest-each', () => {
 
       test('calls global with title containing param values when using sprintf format', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([['hello', 1], ['world', 2]], globalTestMocks);
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([['hello', 1], ['world', 2]]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string: %s %s', noop);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -69,8 +69,8 @@ describe('jest-each', () => {
       test('calls global with cb function containing all parameters of each test case', () => {
         const globalTestMocks = getGlobalTestMocks();
         const testCallBack = jest.fn();
-        const eachObject = each([['hello', 'world'], ['joe', 'bloggs']], globalTestMocks)
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([['hello', 'world'], ['joe', 'bloggs']]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string', testCallBack);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -86,7 +86,7 @@ describe('jest-each', () => {
 
       test('calls global with async done when cb function has more args than params of given test row', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([['hello']], globalTestMocks)
+        const eachObject = each(globalTestMocks)([['hello']]);
 
         const testFunction = get(eachObject, keyPath)
         testFunction('expected string', (hello, done) => {
@@ -127,8 +127,8 @@ describe('jest-each', () => {
 
       test('calls global with given title', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([[]], globalTestMocks);
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([[]]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string', noop);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -138,8 +138,8 @@ describe('jest-each', () => {
 
       test('calls global with given title when multiple tests cases exist', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([[], []], globalTestMocks);
-        const testFunction = get(eachObject, keyPath)
+        const eachObject = each(globalTestMocks)([[], []]);
+        const testFunction = get(eachObject, keyPath);
         testFunction('expected string', noop);
 
         const globalMock = get(globalTestMocks, keyPath);
@@ -149,7 +149,7 @@ describe('jest-each', () => {
 
       test('calls global with title containing param values when using sprintf format', () => {
         const globalTestMocks = getGlobalTestMocks();
-        const eachObject = each([['hello', 1], ['world', 2]], globalTestMocks)
+        const eachObject = each(globalTestMocks)([['hello', 1], ['world', 2]])
         const testFunction = get(eachObject, keyPath)
         testFunction('expected string: %s %s', () => {});
 
