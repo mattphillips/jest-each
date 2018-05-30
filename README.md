@@ -1,3 +1,7 @@
+# `jest-each` has a new home over in core [Jest](https://github.com/facebook/jest/tree/master/packages/jest-each) 🎉
+
+## From Jest >=23 `jest-each` is available natively with `test.each` and `describe.each` [see docs here](https://facebook.github.io/jest/docs/en/api.html#testeachtable-name-fn)
+
 <div align="center">
   <h1>jest-each</h1>
   Jest Parameterised Testing
