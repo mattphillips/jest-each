@@ -2,6 +2,8 @@
 
 ## From Jest >=23 `jest-each` is available natively with `test.each` and `describe.each` [see docs here](https://facebook.github.io/jest/docs/en/api.html#testeachtable-name-fn)
 
+## If you are using an older version of Jest I am still maintaining `jest-each` over in the core repo so you can still use `jest-each` in the exact same way as normal 😊
+
 <div align="center">
   <h1>jest-each</h1>
   Jest Parameterised Testing
